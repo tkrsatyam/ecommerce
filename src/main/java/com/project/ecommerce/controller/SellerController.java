@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:4200")
+import java.util.Map;
+
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/seller")
 public class SellerController {
@@ -20,8 +22,14 @@ public class SellerController {
     }
 
     @GetMapping
-    public ResponseEntity<SellerBean> sellerLogin(@RequestParam String email, @RequestParam String password) {
-        return ResponseEntity.ok(sellerService.login(email, password));
+    public ResponseEntity<?> sellerLogin(@RequestParam String email, @RequestParam String password) {
+        SellerBean seller = sellerService.login(email, password);
+        if (seller == null) {
+            return ResponseEntity
+                    .status(401)
+                    .body(Map.of("error", "Invalid email or password"));
+        }
+        return ResponseEntity.ok(seller);
     }
 
 }

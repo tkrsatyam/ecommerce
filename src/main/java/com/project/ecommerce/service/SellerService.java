@@ -25,7 +25,7 @@ public class SellerService {
     public SellerBean login(String email, String password) {
         Seller seller = this.sellerRepository.findByEmailAndPassword(email, password);
         if (seller == null) {
-            throw new RuntimeException("Invalid email or password");
+            return null;
         }
         SellerBean found = new SellerBean();
         BeanUtils.copyProperties(seller, found);
